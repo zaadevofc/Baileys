@@ -1,0 +1,36 @@
+{
+  "name": "@zaadevofc/baileys",
+  "version": "1.118.9-dev",
+  "description": "",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "npm:prod": "npm publish --access=public",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "baileys"
+  ],
+  "files": [
+    "/lib/**/*"
+  ],
+  "author": {
+    "name": "zaadevofc",
+    "email": "zaadevofc@gmail.com",
+    "url": "https://instagram.com/zaadevofc"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "@types/ms": "^0.7.34",
+    "@types/node": "^20.10.4"
+  },
+  "dependencies": {
+    "@hapi/boom": "^10.0.1",
+    "@whiskeysockets/baileys": "^6.5.0",
+    "cfonts": "^3.2.0",
+    "colors-cli": "^1.0.33",
+    "ms": "^2.1.3",
+    "qrcode": "^1.5.3",
+    "spinnies": "^0.5.1"
+  }
+}

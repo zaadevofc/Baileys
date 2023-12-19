@@ -1,6 +1,6 @@
 {
   "name": "@zaadevofc/baileys",
-  "version": "1.119.9-dev",
+  "version": "1.120.9-dev",
   "description": "Zaieys is a WhatsApp API library that focuses on user convenience and efficiency",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",

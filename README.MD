@@ -16,7 +16,7 @@
 
 Where is the **Zaieys** library to make it easier to create WhatsApp bots. I really look forward to suggestions and input from all of you, thank you for using✨
 
-> If you have any complaints or questions, please submit them on the github issue [here](https://github.com/zaadevofc/Baileys/issues), that will also help everyone.
+> If you have any complaints or questions, please submit them on the github issue [here](https://github.com/zaadevofc/Baileys/issues) or discussion [here](https://github.com/zaadevofc/Baileys/discussions), that will also help everyone.
 
 ## 🚀 Lets do it
 ### Installation

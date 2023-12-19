@@ -17,7 +17,7 @@ let logs = (arr) => arr.forEach(x => console.log(x));
 
 let out: ConnectionReturn = {}
 
-const Connection = (data: Partial<ConnectionState>, sock: ReturnType<typeof makeWASocket>, cb?: any): ConnectionReturn => {
+const Connection = (data: ConnectionState, sock: ReturnType<typeof makeWASocket>, cb?: any): ConnectionReturn => {
     out.status = 'loading';
     console.clear()
     spins_toggle.add('z-connect', { text: 'Waiting bot connection...' })

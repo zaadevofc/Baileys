@@ -16,7 +16,11 @@ export class WA {
     browser?: [string, string, string];
     authors?: string[];
 
-    sock?: ReturnType<typeof makeWASocket> | any;
+    /**
+     * @internal
+     */
+    sock?: ReturnType<typeof makeWASocket>;
+    
     connection?: any;
 
     constructor({
@@ -66,20 +70,23 @@ export class WA {
         });
 
         this.sock.ev.on('connection.update', (data) => {
-            this.sock.ev.emit('connection' as any, Connection(data, this.sock))
+            this.sock?.ev.emit('connection' as any, Connection(data as any, this.sock))
         })
     }
 
     on(events: WAEvents, cb: any) {
         let sock = this.sock;
-        let on = sock.ev.on;
-
+        let ev = sock?.ev;
+        
         switch (events) {
             case 'connection':
-                on('connection' as any, (data: ConnectionReturn) => (cb)(data))
+                ev?.on('connection' as any, (data: ConnectionReturn) => (cb)(data as ConnectionReturn))
                 break;
             case 'message':
-                on('messages.upsert', data => (cb)(Message(data, this.sock)))
+                ev?.on('messages.upsert', data => (cb)(Message(data, this.sock as any)))
+                break;
+            case 'tes':
+                ev?.on('messages' as any, data => (cb)(data))
                 break;
             default:
                 break;

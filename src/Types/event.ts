@@ -7,12 +7,12 @@ export type ConnectionReturn = {
 }
 
 export type MessageReturn = {
-    id: string;
-    remoteJid: string;
-    fromMe: boolean;
-    broadcast: boolean;
-    timeStamp: number;
-    message: {
-        type: 'conversation' | 'extendedTextMessage' | 'ephemeralMessage' | 'editedMessage' | 'audioMessage' | 'imageMessage' | 'videoMessage' | 'stickerMessage' | 'documentMessage' | 'documentWithCaptionMessage' | 'contactMessage' | 'locationMessage' | 'reactionMessage' | 'productMessage' | 'viewOnceMessage' | 'viewOnceMessageV2' | 'pollCreationMessage' | 'pollCreationMessageV3'
+    id?: string;
+    remoteJid?: string;
+    fromMe?: boolean;
+    broadcast?: boolean;
+    timeStamp?: number;
+    message?: {
+        type?: 'conversation' | 'extendedTextMessage' | 'ephemeralMessage' | 'editedMessage' | 'audioMessage' | 'imageMessage' | 'videoMessage' | 'stickerMessage' | 'documentMessage' | 'documentWithCaptionMessage' | 'contactMessage' | 'locationMessage' | 'reactionMessage' | 'productMessage' | 'viewOnceMessage' | 'viewOnceMessageV2' | 'pollCreationMessage' | 'pollCreationMessageV3'
     };
 }

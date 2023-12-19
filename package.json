@@ -1,25 +1,42 @@
 {
   "name": "@zaadevofc/baileys",
-  "version": "1.118.9-dev",
-  "description": "",
+  "version": "1.119.9-dev",
+  "description": "Zaieys is a WhatsApp API library that focuses on user convenience and efficiency",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
     "npm:prod": "npm publish --access=public",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "watch": "tsc && cd ../../.testing && cls && node --watch .",
+    "test": "tsc && cd ../../.testing && cls && node ."
   },
   "keywords": [
-    "baileys"
+    "whatsapp",
+    "js-whatsapp",
+    "whatsapp-api",
+    "whatsapp-web",
+    "whatsapp-chat",
+    "whatsapp-group",
+    "automation",
+    "multi-device",
+    "zaieys",
+    "baileys",
+    "alternative",
+    "wa-api-node",
+    "nodejs"
   ],
   "files": [
     "/lib/**/*"
   ],
+  "homepage": "https://github.com/zaadevofc/Baileys",
+  "repository": {
+    "url": "git@github.com:zaadevofc/Baileys.git"
+  },
   "author": {
     "name": "zaadevofc",
     "email": "zaadevofc@gmail.com",
     "url": "https://instagram.com/zaadevofc"
   },
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/ms": "^0.7.34",
     "@types/node": "^20.10.4"
@@ -31,6 +48,7 @@
     "colors-cli": "^1.0.33",
     "ms": "^2.1.3",
     "qrcode": "^1.5.3",
-    "spinnies": "^0.5.1"
+    "spinnies": "^0.5.1",
+    "typedoc-material-theme": "^1.0.1"
   }
 }

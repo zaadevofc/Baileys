@@ -2,7 +2,7 @@
 
 <!-- ![Zaieys - Typescript/Javascript WhatsApp Node API](https://raw.githubusercontent.com/zaadevofc/Baileys/main/zaieys.jpg) -->
 
-<img src="https://raw.githubusercontent.com/zaadevofc/Baileys/main/zaieys.jpg" alt="Sample screenshot" height="500">
+<img src="https://raw.githubusercontent.com/zaadevofc/Baileys/main/zaieys-banner.jpg" alt="Sample screenshot" height="500">
 
 <br />
 

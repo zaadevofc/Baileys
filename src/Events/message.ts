@@ -24,24 +24,28 @@ const Message = (data: Partial<Message>, sock: ReturnType<typeof makeWASocket>, 
 
 
     data.messages?.forEach((val, i) => {
-        if (!!getValueByKey(val, 'protocolMessage')[0]) {
+        if (!!getValueByKey(val, 'protocolMessage')[0] && !getValueByKey(val, 'editedMessage')[0]) {
             out = {};
             return;
         }
 
+        let reply = getValueByKey(val, 'quotedMessage')[0]?.quotedMessage;
+        let msg = delKeyFromObject(val, 'quotedMessage');
+
         let
-            isGroup = !!getValueByKey(val, 'remoteJid')[0]?.remoteJid.match('@g.us'),
-            isBroadcast = !!getValueByKey(val, 'broadcast')[0]?.broadcast,
-            isEdited = !!getValueByKey(val, 'editedMessage')[0],
+            isGroup = !!getValueByKey(msg, 'remoteJid')[0]?.remoteJid.match('@g.us'),
+            isBroadcast = !!getValueByKey(msg, 'broadcast')[0]?.broadcast,
+            isEdited = !!getValueByKey(msg, 'editedMessage')[0],
             isReply = !!getValueByKey(val, 'quotedMessage')[0],
-            isForwaded = !getValueByKey(val, 'quotedMessage')[0] && !!getValueByKey(val, 'isForwarded')[0],
-            isViewOnce = !!getValueByKey(val, 'viewOnceMessage')[0] || !!getValueByKey(val, 'viewOnceMessageV2')[0] || !!getValueByKey(val, 'viewOnceMessageV2Extension')[0],
-            isEphemeral = !!getValueByKey(val, 'ephemeralMessage')[0],
-            sender = getValueByKey(val, isGroup ? 'participant' : 'remoteJid')[0]?.[isGroup ? 'participant' : 'remoteJid'];
+            isForwaded = !getValueByKey(msg, 'quotedMessage')[0] && !!getValueByKey(msg, 'isForwarded')[0],
+            isViewOnce = !!getValueByKey(msg, 'viewOnceMessage')[0] || !!getValueByKey(msg, 'viewOnceMessageV2')[0] || !!getValueByKey(msg, 'viewOnceMessageV2Extension')[0],
+            isEphemeral = !!getValueByKey(msg, 'ephemeralMessage')[0] || !!getValueByKey(msg, 'ephemeralSettingTimestamp')[0],
+            sender = getValueByKey(msg, isGroup ? 'participant' : 'remoteJid')[0]?.[isGroup ? 'participant' : 'remoteJid'];
 
         out[i] = {
             id: getValueByKey(val, 'id')[0]?.id,
             remoteJid: getValueByKey(val, 'remoteJid')[0]?.remoteJid,
+            fromMe: getValueByKey(val, 'fromMe')[0]?.fromMe,
             timestamp: Number(getValueByKey(val, 'messageTimestamp')[0]?.messageTimestamp),
             sender: sender,
             pushName: getValueByKey(val, 'pushName')[0]?.pushName,
@@ -58,17 +62,13 @@ const Message = (data: Partial<Message>, sock: ReturnType<typeof makeWASocket>, 
         }
 
         let isText = out[i].messageType == 'text';
-        let reply = getValueByKey(val, 'quotedMessage')[0]?.quotedMessage;
-        let msg = delKeyFromObject(val, 'quotedMessage');
 
         out[i] = {
             ...out[i],
             message: {
                 text: getValueByKey(msg, 'caption')[0]?.caption || getValueByKey(msg, 'extendedTextMessage')[0]?.extendedTextMessage?.text || getValueByKey(msg, 'conversation')[0]?.conversation,
             } || {},
-            reply: {
-                text: getValueByKey(reply, 'caption')[0]?.caption || getValueByKey(reply, 'extendedTextMessage')[0]?.extendedTextMessage?.text || getValueByKey(reply, 'conversation')[0]?.conversation,
-            } || {},
+            reply: {}
         }
 
         if (!isText) {
@@ -84,15 +84,44 @@ const Message = (data: Partial<Message>, sock: ReturnType<typeof makeWASocket>, 
         }
 
         if (isReply) {
-            let key = getMessageType({[getKeyByValue(getMessageType(reply))]: ''});
-            
+            let
+                context = getValueByKey(val, 'contextInfo')[0]?.contextInfo,
+                key = getMessageType({ [getKeyByValue(getMessageType(reply))]: '' }),
+                id = getValueByKey(context, 'stanzaId')[0]?.stanzaId,
+                sender = getValueByKey(context, 'participant')[0]?.participant,
+                isForwarded = !!getValueByKey(context, 'isForwarded')[0]?.isForwarded,
+                isViewOnce = !!getValueByKey(context, 'viewOnceMessage')[0] || !!getValueByKey(context, 'viewOnceMessageV2')[0] || !!getValueByKey(context, 'viewOnceMessageV2Extension')[0]
+
             out[i] = {
                 ...out[i],
                 reply: {
-                    ...out[i].reply,
-                    [key]: getValueByKey(reply, getKeyByValue(getMessageType(reply)))[0]?.[getKeyByValue(getMessageType(reply))],
+                    id: id,
+                    remoteJid: getValueByKey(val, 'remoteJid')[0]?.remoteJid,
+                    sender: sender,
+                    isForwarded: isForwarded,
+                    isViewOnce: isViewOnce,
+                    type: key,
                 } || {},
             }
+
+            if (key == 'text') {
+                out[i] = {
+                    ...out[i],
+                    reply: {
+                        ...out[i].reply,
+                        text: getValueByKey(reply, 'caption')[0]?.caption || getValueByKey(reply, 'extendedTextMessage')[0]?.extendedTextMessage?.text || getValueByKey(reply, 'conversation')[0]?.conversation,
+                    } || {},
+                }
+            } else {
+                out[i] = {
+                    ...out[i],
+                    reply: {
+                        ...out[i].reply,
+                        [key]: getValueByKey(reply, getKeyByValue(getMessageType(reply)))[0]?.[getKeyByValue(getMessageType(reply))],
+                    } || {},
+                }
+            }
+
         }
     })
 

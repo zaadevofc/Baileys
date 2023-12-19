@@ -16,12 +16,8 @@ export class WA {
     browser?: [string, string, string];
     authors?: string[];
 
-    /**
-     * @internal
-     */
-    sock?: ReturnType<typeof makeWASocket>;
-    
-    connection?: any;
+    private sock?: ReturnType<typeof makeWASocket>;
+    private connection?: any;
 
     constructor({
         authDir = 'session',
@@ -93,7 +89,7 @@ export class WA {
         }
     }
 
-    decodeJid = async (jid) => {
+    private decodeJid = async (jid) => {
         if (/:\d+@/gi.test(jid)) {
             const decode: any = jidDecode(jid) || {};
             return ((decode.user && decode.server && decode.user + "@" + decode.server) || jid).trim();

@@ -17,12 +17,11 @@ let logs = (arr) => arr.forEach(x => console.log(x));
 
 let out: Partial<MessageReturn[]> | any = []
 
-const Message = (data: Partial<Message>, sock: ReturnType<typeof makeWASocket>, cb?: any): Partial<MessageReturn[]> | null => {
+const Message = (data: Partial<Message>, sock: ReturnType<typeof makeWASocket>, cb?: any): Partial<MessageReturn> | null => {
     log('')
     log(JSON.stringify(data, null, 2))
     log('')
-
-
+    
     data.messages?.forEach((val, i) => {
         if (!!getValueByKey(val, 'protocolMessage')[0] && !getValueByKey(val, 'editedMessage')[0]) {
             out = {};
@@ -125,7 +124,7 @@ const Message = (data: Partial<Message>, sock: ReturnType<typeof makeWASocket>, 
         }
     })
 
-    return out;
+    return out.at(-1);
 }
 
 export default Message;

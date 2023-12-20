@@ -1,1 +1,4 @@
-export * from './Modules';
+import WA from "./Modules/WA";
+
+export { WA };
+

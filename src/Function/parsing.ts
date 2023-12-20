@@ -64,3 +64,41 @@ export const getMessageType = (obj: any) => {
     }
     return null;
 }
+
+export const newValueByKey = (obj: any, update: { [key: string]: any }[]) => {
+
+    const recursive = (obj) => {
+  
+      let isUpdated = false;
+  
+      update.forEach(o => {
+        if (o && typeof obj === 'object' && obj.hasOwnProperty(Object.keys(o)[0])) {
+          obj[Object.keys(o)[0]] = o[Object.keys(o)[0]];
+          isUpdated = true;  
+        }
+      });
+  
+      if (!isUpdated && typeof obj !== 'object') {
+        return null;
+      }
+  
+      if (typeof obj === 'object') {
+        for (let key in obj) {        
+          if (obj.hasOwnProperty(key)) {
+             const result = recursive(obj[key]);
+             if (result !== null) {
+               isUpdated = true;
+             } 
+          }
+        }
+      }
+  
+      return isUpdated ? obj : null;
+  
+    }
+  
+    return recursive(obj);  
+  
+  }
+
+export const parseMentions = (text: any) => [...text.matchAll(/@([0-9]{5,16}|0)/g)].map((v) => v[1] + '@s.whatsapp.net');

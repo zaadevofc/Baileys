@@ -6,24 +6,30 @@ import Connection from '../Events/connection';
 import Message from '../Events/message';
 import { WAConfig, WAEvents } from '../Types';
 import { ConnectionReturn } from './../Types/event';
+import Action from './Action';
 
 const logger = pino({ class: 'zaieys', level: 'fatal' }).child({ level: 'fatal' });
 const msgCache = new NodeCache()
 
-export class WA {
+export default class WA extends Action {
     showLog?: boolean;
     authDir?: string;
     browser?: [string, string, string];
     authors?: string[];
 
-    private sock?: ReturnType<typeof makeWASocket>;
-    private connection?: any;
+    sock?: ReturnType<typeof makeWASocket>;
+    messages?: any;
 
     constructor({
         authDir = 'session',
         showLog = true,
         browser = ['Zaieys', 'Safari', '1.0']
     }: WAConfig) {
+        super({ messages, sock })
+
+        var messages = this.messages;
+        var sock = this.sock;
+
         this.showLog = showLog;
         this.authDir = authDir;
         this.browser = browser;
@@ -73,13 +79,16 @@ export class WA {
     on(events: WAEvents, cb: any) {
         let sock = this.sock;
         let ev = sock?.ev;
-        
+
         switch (events) {
             case 'connection':
                 ev?.on('connection' as any, (data: ConnectionReturn) => (cb)(data as ConnectionReturn))
                 break;
             case 'message':
-                ev?.on('messages.upsert', data => (cb)(Message(data, this.sock as any)))
+                ev?.on('messages.upsert', data => {
+                    this.messages = data.messages;
+                    (cb)(Message(data, this.sock as any))
+                })
                 break;
             case 'tes':
                 ev?.on('messages' as any, data => (cb)(data))

@@ -1,11 +1,11 @@
-import makeWASocket from "@whiskeysockets/baileys";
+import makeWASocket, { jidDecode } from "@whiskeysockets/baileys";
 import { newValueByKey, parseMentions } from "../Function";
 
 export default class Action {
     messages?: any;
     sock?: ReturnType<typeof makeWASocket>;
 
-    constructor(public wa: any) {
+    constructor(private wa: any) {
         this.messages = wa.messages;
         this.sock = wa.sock;
     }
@@ -32,4 +32,11 @@ export default class Action {
         let user = this.getUtils();
         await this.sock?.sendMessage(user.id, { text: text, mentions: parseMentions(text) })
     }
+
+    decodeJid = async (jid) => {
+        if (/:\d+@/gi.test(jid)) {
+            const decode: any = jidDecode(jid) || {};
+            return ((decode.user && decode.server && decode.user + "@" + decode.server) || jid).trim();
+        } else return jid.trim();
+    };
 }

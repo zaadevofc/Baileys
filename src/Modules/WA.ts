@@ -1,4 +1,4 @@
-import makeWASocket, { fetchLatestBaileysVersion, jidDecode, jidNormalizedUser, makeCacheableSignalKeyStore, makeInMemoryStore, proto, useMultiFileAuthState } from '@whiskeysockets/baileys';
+import makeWASocket, { fetchLatestBaileysVersion, jidNormalizedUser, makeCacheableSignalKeyStore, makeInMemoryStore, proto, useMultiFileAuthState } from '@whiskeysockets/baileys';
 import ms from 'ms';
 import NodeCache from 'node-cache';
 import pino from 'pino';
@@ -97,11 +97,4 @@ export default class WA extends Action {
                 break;
         }
     }
-
-    private decodeJid = async (jid) => {
-        if (/:\d+@/gi.test(jid)) {
-            const decode: any = jidDecode(jid) || {};
-            return ((decode.user && decode.server && decode.user + "@" + decode.server) || jid).trim();
-        } else return jid.trim();
-    };
 }

@@ -7,13 +7,13 @@ import { join } from 'path';
 import qrc from 'qrcode';
 import Spinnies from 'spinnies';
 import { point } from "../Config";
-import { ConnectionReturn } from "../Types";
+import { ConnectionReturn } from "../Types/event";
 
 const pkg = JSON.parse(readFileSync(join(__dirname, '../../package.json'), 'utf-8'));
 let spins_toggle = new Spinnies({ spinner: point });
 
 let log = console.log;
-let logs = (arr) => arr.forEach(x => console.log(x));
+let logs = (arr) => arr.forEach(x => x !== undefined && console.log(x));
 
 let out: ConnectionReturn = {}
 
@@ -35,7 +35,6 @@ const Connection = (data: ConnectionState, sock: ReturnType<typeof makeWASocket>
         color.yellow(`🔹 version    : ${color.cyan(pkg.version)}`),
         color.yellow(`🔹 license    : ${color.cyan(pkg.license)}`)
     ]);
-
 
     log('')
 
@@ -93,15 +92,15 @@ const Connection = (data: ConnectionState, sock: ReturnType<typeof makeWASocket>
         out.loginName = sock?.user?.name;
         out.waVersion = sock['za']['waVersion'];
         out.waLatest = sock['za']['waLatest'];
-        
+
         logs([
             color.yellow(`🔸 Login ID   : ${color.cyan(out.loginId as any)}`),
-            color.yellow(`🔸 Login Name : ${color.cyan(out.loginName)}`),
+            out.loginName && color.yellow(`🔸 Login Name : ${color.cyan(out.loginName)}`),
             color.yellow(`🔸 Wa Version : ${color.cyan(out.waVersion)}`),
             color.yellow(`🔸 Wa Latest  : ${color.cyan(out.waLatest ? 'yes' : 'no')}`)
         ]);
-        log('')
-        spins_toggle.succeed('z-connect', { text: `${color.magenta_bt(sock?.user?.name)} ready to use`, succeedPrefix: '✅' })
+        log('')        
+        spins_toggle.succeed('z-connect', { text: `${color.magenta_bt(sock?.user?.name || sock?.user?.verifiedName || out.loginId)} ready to use`, succeedPrefix: '✅' })
         log('')
     }
 

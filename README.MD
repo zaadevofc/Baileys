@@ -1,6 +1,6 @@
 # Zaieys - Typescript/Javascript WhatsApp Node API
 
-<img src="https://raw.githubusercontent.com/zaadevofc/Baileys/main/zaieys-banner.jpg" alt="Zaieys - Typescript/Javascript WhatsApp Node API">
+<img src="https://raw.githubusercontent.com/zaadevofc/Baileys/main/assets/zaieys-banner.jpg" alt="Zaieys - Typescript/Javascript WhatsApp Node API">
 
 ## _**Warning!!! This library is not fully finished, and it is still really raw, I suggest you patiently wait until the version of this library is no longer -dev (development)**_
 

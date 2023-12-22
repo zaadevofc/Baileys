@@ -5,6 +5,9 @@ export const MESSAGE_TYPE = {
     'CALL_MISSED_VOICE': 'voiceCall',
     'CALL_MISSED_VIDEO': 'videoCall',
     'editedMessage': 'text',
+    'templateMessage': 'button',
+    'buttonsMessage': 'button',
+    'templateButtonReplyMessage': 'replyButton',
     'audioMessage': 'audio',
     'imageMessage': 'image',
     'gifPlayback': 'gif',
@@ -19,6 +22,6 @@ export const MESSAGE_TYPE = {
     // 'viewOnceMessage': 'viewOnce',
     // 'viewOnceMessageV2': 'viewOnce',
     // 'viewOnceMessageV2Extension': 'viewOnce',
-    'pollCreationMessage': 'pollCreation',
-    'pollCreationMessageV3': 'pollCreation',
+    'pollCreationMessage': 'poll',
+    'pollCreationMessageV3': 'poll',
 };

@@ -5,26 +5,31 @@ import NodeCache from 'node-cache';
 import pino from 'pino';
 import Connection from '../Events/connection';
 import Message from '../Events/message';
+import { isObjectNull } from '../Function';
 import { WAConfig, WAEvents } from '../Types/global';
 import Action from './Action';
+import Logs from './Logs';
 
 const logger = pino({ class: 'zaieys', level: 'fatal' }).child({ level: 'fatal' });
 const msgCache = new NodeCache({ stdTTL: 3 })
 
 /**
- * main class to make connection to whatsapp
+ * [![zaieys](https://img.shields.io/badge/baileys-alternative-blue)](https://github.com/zaadevofc/Baileys)
+ * [![zaieys](https://img.shields.io/badge/zaadevofc-zaieys-red)](https://github.com/zaadevofc/Baileys)
+
+ * **Zaieys** is a WhatsApp API library that focuses on user convenience and efficiency. This library is only a modification of the [@whiskeysockets/baileys](https://github.com/WhiskeySockets/Baileys) library. 
+
+ * Where is the **Zaieys** library to make it easier to create WhatsApp bots. I really look forward to suggestions and input from all of you, thank you for using✨
  * 
- * see `WA` config constructor **WAConfig**
- * 
- * @interface WAConfig
- * @extends Action action.
+ * If you have any complaints or questions, please submit them on the github issue [here](https://github.com/zaadevofc/Baileys/issues) or discussion [here](https://github.com/zaadevofc/Baileys/discussions), that will also help everyone.
  */
 export default class WA extends Action {
-    // protected showLog?: boolean;
+    protected showLog?: boolean;
     protected authDir?: string;
     protected ignoreMe?: boolean;
     protected browser?: [string, string, string];
     protected authors?: string[];
+    protected ramMaximum?: string | number;
 
     protected sock?: ReturnType<typeof makeWASocket>;
     protected messages?: any;
@@ -36,9 +41,10 @@ export default class WA extends Action {
         var messages = this.messages;
         var sock = this.sock;
 
+        this.ramMaximum = config?.ramMaximum || '1000mb';
         this.authors = config?.authors || [];
         this.ignoreMe = config?.ignoreMe || true;
-        // this.showLog = config?.showLog || true;
+        this.showLog = config?.showLog || true;
         this.authDir = config?.authDir || "session";
         this.browser = config?.browser || ["Zaieys", "Chorme", "1.0.0"];
     }
@@ -70,11 +76,12 @@ export default class WA extends Action {
             getMessage: async (key: any) => (await store.loadMessage(jidNormalizedUser(key.remoteJid), key.id))?.message as proto.IMessage,
         });
 
+        Logs(this.sock, { showLog: this.showLog })
         store.bind(this.sock.ev)
         this.sock['za'] = { waVersion: version, waLatest: isLatest, hh: async (s) => await this.decodeJid(s) };
 
         this.sock.ev.on('creds.update', saveCreds);
-        this.sock.ev.on('reload' as any, () => func());
+        this.sock.ev.on('reload' as any, async () => await func());
 
         this.sock.ev.on("contacts.update", async (msg) => {
             for (let cntc of msg) {
@@ -90,11 +97,11 @@ export default class WA extends Action {
 
         const autoLoad = setInterval(() => {
             var ram = process.memoryUsage().rss
-            if (ram >= bytes('1000mb')) {
+            if (ram >= bytes(this.ramMaximum)) {
                 clearInterval(autoLoad);
                 this.sock?.ev.emit('reload' as any, true);
             }
-        }, ms('5m'))
+        }, ms('2m'))
     }
 
     /**
@@ -119,8 +126,9 @@ export default class WA extends Action {
                 ev?.on('messages.upsert', async data => {
                     this.messages = data.messages;
                     let cb = Message(data, this.sock as any, { authors: this.authors });
+                    if (isObjectNull(cb)) return;
                     if (this?.ignoreMe && cb?.fromMe) return;
-                    console.log({ asasas: await this.decodeJid('62858788977801@s.whatsapp.net') });
+                    this.sock?.ev.emit('logs' as any, { events: 'message', data: cb });
                     (listener)(cb)
                 })
                 break;

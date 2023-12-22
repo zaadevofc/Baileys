@@ -102,3 +102,5 @@ export const newValueByKey = (obj: any, update: { [key: string]: any }[]) => {
   }
 
 export const parseMentions = (text: any) => [...text.matchAll(/@([0-9]{5,16}|0)/g)].map((v) => v[1] + '@s.whatsapp.net');
+
+export const isObjectNull = (object: any) => (!object && true) || Object.keys(object).length == 0

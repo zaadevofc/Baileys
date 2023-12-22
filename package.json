@@ -1,6 +1,6 @@
 {
   "name": "@zaadevofc/baileys",
-  "version": "1.120.9-dev",
+  "version": "1.124.9-dev",
   "description": "Zaieys is a WhatsApp API library that focuses on user convenience and efficiency",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -44,7 +44,7 @@
   },
   "dependencies": {
     "@hapi/boom": "^10.0.1",
-    "@whiskeysockets/baileys": "github:WhiskeySockets/Baileys",
+    "@whiskeysockets/baileys": "^6.5.0",
     "add": "^2.0.6",
     "bytes": "^3.1.2",
     "cfonts": "^3.2.0",

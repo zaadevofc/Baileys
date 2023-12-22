@@ -11,6 +11,7 @@ import { ConnectionReturn } from "../Types/event";
 
 const pkg = JSON.parse(readFileSync(join(__dirname, '../../package.json'), 'utf-8'));
 let spins_toggle = new Spinnies({ spinner: point });
+let spins_empty = new Spinnies({ spinner: { interval: 360, frames: [''] } });
 
 let log = console.log;
 let logs = (arr) => arr.forEach(x => x !== undefined && console.log(x));
@@ -99,9 +100,9 @@ const Connection = (data: ConnectionState, sock: ReturnType<typeof makeWASocket>
             color.yellow(`🔸 Wa Version : ${color.cyan(out.waVersion)}`),
             color.yellow(`🔸 Wa Latest  : ${color.cyan(out.waLatest ? 'yes' : 'no')}`)
         ]);
-        log('')        
-        spins_toggle.succeed('z-connect', { text: `${color.magenta_bt(sock?.user?.name || sock?.user?.verifiedName || out.loginId)} ready to use`, succeedPrefix: '✅' })
         log('')
+        spins_toggle.succeed('z-connect', { text: `${color.magenta_bt(sock?.user?.name || sock?.user?.verifiedName || out.loginId)} ready to use`, succeedPrefix: '✅' })
+        log('\n')
     }
 
     return out

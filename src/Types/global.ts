@@ -8,7 +8,7 @@ export interface WAConfig {
      * 
      * default == `true`
      */
-    // showLog?: boolean;
+    showLog?: boolean;
     /**
      * the place or name of the folder where the session will be stored in the root of your project.
      * 
@@ -45,18 +45,15 @@ export interface WAConfig {
     /**
      * this is useful if you use it on servers such as VPS and others. if the running RAM is almost close to RAM capacity, the system will reload and refresh it to prevent overload.
      * 
-     * **example :** `5m` `1h` `600000` .etc
+     * **example :** `500mb` `1gb` `500gb` `2tb` .etc
      * 
-     * i convert various time formats to milliseconds with this [ms](https://github.com/vercel/ms) library.
+     * default == `1gb` (gigabytes)
      */
     ramMaximum?: string | number;
 }
 
-/**
- * WAEvents.
- */
+/** WAEvents. */
 export type WAEvents = {
     'connection': ConnectionReturn;
     'message': MessageReturn;
-    'test': any;
 }

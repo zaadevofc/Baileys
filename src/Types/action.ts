@@ -6,7 +6,13 @@ export type DefaultConfig = {
 
 export type AdditionalConfig = {
     /**
-     * is just make reply look verified
+     * this will make the reply look verified.
+     * 
+     * _**but this only works on smartphones, it doesn't work like for example wa web or wa desktop**_
+     * 
+     * looks like this :
+     * 
+     * ![nyenggol zharif?](https://i.ibb.co/9ZshsLn/image-1-2.png)
      */
     fakeVerified?: boolean
     isReply?: boolean
@@ -14,7 +20,13 @@ export type AdditionalConfig = {
 
 export type SendReplyConfig = {
     /**
-     * is just make reply look verified
+     * this will make the reply look verified.
+     * 
+     * _**but this only works on smartphones, it doesn't work like for example wa web or wa desktop**_
+     * 
+     * looks like this :
+     * 
+     * ![nyenggol zharif?](https://i.ibb.co/9ZshsLn/image-1-2.png)
      */
     fakeVerified?: boolean
 } & DefaultConfig

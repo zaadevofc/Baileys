@@ -1,6 +1,6 @@
 {
   "name": "@zaadevofc/baileys",
-  "version": "1.124.9-dev",
+  "version": "1.125.9-dev",
   "description": "Zaieys is a WhatsApp API library that focuses on user convenience and efficiency",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -24,12 +24,18 @@
     "wa-api-node",
     "nodejs"
   ],
+  "contributors": [
+    "zaadevofc"
+  ],
   "files": [
     "/lib/**/*"
   ],
   "homepage": "https://github.com/zaadevofc/Baileys",
   "repository": {
     "url": "git@github.com:zaadevofc/Baileys.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zaadevofc/Baileys/issues"
   },
   "author": {
     "name": "zaadevofc",

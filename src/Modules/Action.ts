@@ -77,7 +77,7 @@ export default class Action {
     /**
      * send contact message.
      * 
-     * @param vcard any
+     * @param config {@link SendContactConfig}
      */
     async sendContact(config?: SendContactConfig) {
         if (!config) return;

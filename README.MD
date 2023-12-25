@@ -12,7 +12,7 @@
 [![download](https://img.shields.io/npm/dw/@zaadevofc/baileys.svg?style=flat-square)](https://www.npmjs.com/package/@zaadevofc/baileys)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**Zaieys** is a WhatsApp API library that focuses on user convenience and efficiency. This library is only a modification of the [@whiskeysockets/baileys](https://github.com/WhiskeySockets/Baileys) library. 
+**Zaieys** is a WhatsApp API library that focuses on user convenience and efficiency. This library is only a modification of the [baileys](https://github.com/WhiskeySockets/Baileys) library. 
 
 Where is the **Zaieys** library to make it easier to create WhatsApp bots. I really look forward to suggestions and input from all of you, thank you for using✨
 

@@ -3,15 +3,19 @@ import { MESSAGE_TYPE } from "../Config";
 export const getValueByKey = (obj: any, key: string): any[] | null | any => {
     const values: any = [];
     const find = (obj: object, key: string) => {
-        if (!obj) return;
-        if (obj[key]) {
-            values.push({ [key]: obj[key] });
-        }
-        Object.values(obj).forEach(val => {
-            if (typeof val === 'object') {
-                find(val, key);
+        try {
+            if (!obj) return;
+            if (obj[key]) {
+                values.push({ [key]: obj[key] });
             }
-        });
+            Object.values(obj).forEach(val => {
+                if (typeof val === 'object') {
+                    find(val, key);
+                }
+            });
+        } catch (e) {
+            return null;
+        }
     }
     find(obj, key);
     return values;
@@ -68,38 +72,38 @@ export const getMessageType = (obj: any) => {
 export const newValueByKey = (obj: any, update: { [key: string]: any }[]) => {
 
     const recursive = (obj) => {
-  
-      let isUpdated = false;
-  
-      update.forEach(o => {
-        if (o && typeof obj === 'object' && obj.hasOwnProperty(Object.keys(o)[0])) {
-          obj[Object.keys(o)[0]] = o[Object.keys(o)[0]];
-          isUpdated = true;  
+
+        let isUpdated = false;
+
+        update.forEach(o => {
+            if (o && typeof obj === 'object' && obj.hasOwnProperty(Object.keys(o)[0])) {
+                obj[Object.keys(o)[0]] = o[Object.keys(o)[0]];
+                isUpdated = true;
+            }
+        });
+
+        if (!isUpdated && typeof obj !== 'object') {
+            return null;
         }
-      });
-  
-      if (!isUpdated && typeof obj !== 'object') {
-        return null;
-      }
-  
-      if (typeof obj === 'object') {
-        for (let key in obj) {        
-          if (obj.hasOwnProperty(key)) {
-             const result = recursive(obj[key]);
-             if (result !== null) {
-               isUpdated = true;
-             } 
-          }
+
+        if (typeof obj === 'object') {
+            for (let key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    const result = recursive(obj[key]);
+                    if (result !== null) {
+                        isUpdated = true;
+                    }
+                }
+            }
         }
-      }
-  
-      return isUpdated ? obj : null;
-  
+
+        return isUpdated ? obj : null;
+
     }
-  
-    return recursive(obj);  
-  
-  }
+
+    return recursive(obj);
+
+}
 
 export const parseMentions = (text: any) => [...text.matchAll(/@([0-9]{5,16}|0)/g)].map((v) => v[1] + '@s.whatsapp.net');
 

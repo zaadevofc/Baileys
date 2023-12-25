@@ -10,14 +10,14 @@ import { WAConfig, WAEvents } from '../Types/global';
 import Action from './Action';
 import Logs from './Logs';
 
-const logger = pino({ class: 'zaieys', level: 'fatal' }).child({ level: 'fatal' });
-const msgCache = new NodeCache({ stdTTL: 3 })
+const logger = pino({ level: 'fatal' }).child({ level: 'fatal' });
+const msgCache = new NodeCache({ stdTTL: 0 })
 
 /**
  * [![zaieys](https://img.shields.io/badge/baileys-alternative-blue)](https://github.com/zaadevofc/Baileys)
  * [![zaieys](https://img.shields.io/badge/zaadevofc-zaieys-red)](https://github.com/zaadevofc/Baileys)
 
- * **Zaieys** is a WhatsApp API library that focuses on user convenience and efficiency. This library is only a modification of the [@whiskeysockets/baileys](https://github.com/WhiskeySockets/Baileys) library. 
+ * **Zaieys** is a WhatsApp API library that focuses on user convenience and efficiency. This library is only a modification of the [baileys](https://github.com/WhiskeySockets/Baileys) library. 
 
  * Where is the **Zaieys** library to make it easier to create WhatsApp bots. I really look forward to suggestions and input from all of you, thank you for using✨
  * 
@@ -27,25 +27,25 @@ export default class WA extends Action {
     /**
      * a log of all incoming chats will appear in the terminal if this is active.
      * 
-     * default == `true`
+     * > **default == `true`**
      */
     showLog?: boolean;
     /**
      * the place or name of the folder where the session will be stored in the root of your project.
      * 
-     * default == `session`
+     * > **default == `session`**
      */
     authDir?: string;
     /**
      * browser config.
      * 
-     * default == `["Zaieys", "Chorme", "1.0.0"]`
+     * > **default == `["Zaieys", "Chorme", "1.0.0"]`**
      */
     browser?: [string, string, string];
     /**
      * if this is off, the bot will execute messages from itself. I suggest just activating it.
      * 
-     * default == `true`
+     * > **default == `true`**
      */
     ignoreMe?: boolean;
     /**
@@ -60,7 +60,7 @@ export default class WA extends Action {
      }
      ```
      * 
-     * default == `[]`
+     * > **default == `[]`**
      */
     authors?: string[];
     /**
@@ -68,24 +68,45 @@ export default class WA extends Action {
      * 
      * **example :** `500mb` `1gb` `500gb` `2tb` .etc
      * 
-     * default == `1gb` (gigabytes)
+     * > **default == `1gb` (gigabytes)**
      */
     ramMaximum?: string | number;
+    /**
+     * the link sent by the bot will provide a preview of the link if available. However, this possibility will make the bot a **little slow**.
+     * 
+     * ![yawawe](https://i.ibb.co/hMBQ7d3/a.png)
+     * 
+     * **]>** kemungkinan jika bot jalan di **lokal server** akan sedikit **lemot**. karna sebelumnya *bot akan mencari data dari link tersebut kemudian menyajikan preview nya*.
+     * 
+     * **]>** it's possible that if the bot runs on a **local server** it will be a little **slow**. because previously the *bot would search for data from the link then present a preview*.
+     * 
+     * ***if this is active, all actions from this bot will present a preview link.***
+     * 
+     * or another option if you want an action to present a preview link, you can do it like this :
+       ```js
+       await wa.sendText("some text", { showLinkPreview: true })
+       ```
+     * > **default == `false`**
+     */
+    showLinkPreview?: boolean;
 
     protected sock?: ReturnType<typeof makeWASocket>;
+    protected store?: ReturnType<typeof makeInMemoryStore>;
     protected messages?: any;
     protected status?: "close" | "ready" | "loading";
 
     constructor(config: WAConfig) {
-        super({ messages, sock })
+        super({ messages, sock, config, store })
 
         var messages = this.messages;
         var sock = this.sock;
+        var store = this.store;
 
-        this.ramMaximum = config?.ramMaximum || '1000mb';
+        this.ramMaximum = config?.ramMaximum || '1gb';
         this.authors = config?.authors || [];
-        this.ignoreMe = config?.ignoreMe || true;
-        this.showLog = config?.showLog || true;
+        this.ignoreMe = config?.ignoreMe ? true : config?.ignoreMe;
+        this.showLinkPreview = config?.showLinkPreview ? false : config?.showLinkPreview;
+        this.showLog = config?.showLog ? true : config?.showLog;
         this.authDir = config?.authDir || "session";
         this.browser = config?.browser || ["Zaieys", "Chorme", "1.0.0"];
     }
@@ -96,7 +117,7 @@ export default class WA extends Action {
      * @param func fields with your start function.
      */
     async init(func: any): Promise<void> {
-        const store = makeInMemoryStore({ logger });
+        const store = makeInMemoryStore({ logger } as any);
         store.readFromFile(`./${this.authDir}/store.json`)
         setInterval(() => { store.writeToFile(`./${this.authDir}/store.json`) }, ms('10s'))
 
@@ -106,14 +127,18 @@ export default class WA extends Action {
         this.sock = makeWASocket({
             auth: {
                 creds: state.creds,
-                keys: makeCacheableSignalKeyStore(state.keys, logger),
+                keys: makeCacheableSignalKeyStore(state.keys, logger as any),
             },
             version: version,
             printQRInTerminal: false,
-            logger: logger,
+            logger: logger as any,
             browser: this.browser,
-            msgRetryCounterCache: msgCache,
             defaultQueryTimeoutMs: undefined,
+            generateHighQualityLinkPreview: false,
+            linkPreviewImageThumbnailWidth: 500,
+            msgRetryCounterCache: msgCache,
+            // mediaCache: msgCache,
+            userDevicesCache: msgCache,
             getMessage: async (key: any) => (await store.loadMessage(jidNormalizedUser(key.remoteJid), key.id))?.message as proto.IMessage,
         });
 
@@ -132,7 +157,11 @@ export default class WA extends Action {
             }
         });
 
+        this.store = store;
+
         this.sock.ev.on('connection.update', (data) => {
+            // console.log({msgCache: msgCache.get('kejaa')});
+
             this.sock?.ev.emit('connection' as any, Connection(data as any, this.sock))
         })
 
@@ -143,13 +172,14 @@ export default class WA extends Action {
                 this.sock?.ev.emit('reload' as any, true);
             }
         }, ms('2m'))
+
     }
 
     /**
      * listen to events and get it callback.
      * 
-     * @param events list of events listener [here](s)
-     * @param listener send data callback
+     * @param events list of events listener {@link WAEvents}
+     * @param listener send data callback `void`
      */
     on<E extends keyof WAEvents>(events: E, listener: (data: WAEvents[E]) => void) {
         let sock = this.sock;
@@ -157,7 +187,7 @@ export default class WA extends Action {
 
         switch (events) {
             case 'connection':
-                ev?.on('connection' as any, data => {
+                ev?.on('connection' as any, async data => {
                     this.status = data.status;
                     (listener)(data)
                 })
@@ -170,6 +200,12 @@ export default class WA extends Action {
                     if (isObjectNull(cb)) return;
                     if (this?.ignoreMe && cb?.fromMe) return;
                     this.sock?.ev.emit('logs' as any, { events: 'message', data: cb });
+
+                    console.log({
+                        data: await msgCache.data
+                    });
+                    
+
                     (listener)(cb)
                 })
                 break;

@@ -18,14 +18,16 @@ export type MessageIntern = {
     text: string;
     [_: string]: any
 } & {
-    [Key in MessageType]: any
-}
+        [Key in MessageType]: any
+    }
 
 export type ReplyIntern = {
     /** message text from sender. */
     text: string;
     /** message chat id. */
     id: string;
+    /** phone number of sender. */
+    phoneNumber?: number;
     /** message chat remote id. */
     remoteJid: string;
     /**
@@ -41,14 +43,16 @@ export type ReplyIntern = {
     /** the type of message sent. */
     type: MessageType;
 } & {
-    [Key in MessageType]: any
-}
+        [Key in MessageType]: any
+    }
 
 export type MessageReturn = {
     /** message chat id. */
     id: string
     /** message chat remote id. */
     remoteJid: string
+    /** phone number of sender. */
+    phoneNumber?: number;
     /**
      * if a message is a message from itself, then this will be `true`.
      * 

@@ -1,5 +1,5 @@
 import { Boom } from "@hapi/boom";
-import makeWASocket, { ConnectionState, DisconnectReason } from "@whiskeysockets/baileys";
+import makeWASocket, { ConnectionState, DisconnectReason } from '@whiskeysockets/baileys';
 import cfonts from 'cfonts';
 import color from 'colors-cli';
 import { readFileSync } from 'fs';
@@ -47,6 +47,8 @@ const Connection = (data: ConnectionState, sock: ReturnType<typeof makeWASocket>
     }
 
     if (c == 'close') {
+        console.log(l);
+        
         out.status = 'close';
         spins_toggle.stopAll('fail');
         let reason = new Boom(l?.error)?.output.statusCode;

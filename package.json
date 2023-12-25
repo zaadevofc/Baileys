@@ -1,6 +1,6 @@
 {
   "name": "@zaadevofc/baileys",
-  "version": "1.125.9-dev",
+  "version": "1.127.9-dev",
   "description": "Zaieys is a WhatsApp API library that focuses on user convenience and efficiency",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -19,7 +19,6 @@
     "automation",
     "multi-device",
     "zaieys",
-    "baileys",
     "alternative",
     "wa-api-node",
     "nodejs"
@@ -46,17 +45,31 @@
   "devDependencies": {
     "@types/ms": "^0.7.34",
     "@types/node": "^20.10.4",
+    "@types/pino": "^7.0.5",
     "typedoc-material-theme": "^1.0.1"
   },
   "dependencies": {
     "@hapi/boom": "^10.0.1",
     "@whiskeysockets/baileys": "^6.5.0",
-    "add": "^2.0.6",
+    "axios": "^1.6.2",
     "bytes": "^3.1.2",
     "cfonts": "^3.2.0",
+    "chatgpt": "^5.2.5",
+    "child_process": "^1.0.2",
     "colors-cli": "^1.0.33",
+    "ffmpeg": "^0.0.4",
+    "fluent-ffmpeg": "^2.1.2",
+    "form-data": "^4.0.0",
+    "handbrake-js": "^7.0.0",
+    "https": "^1.0.0",
+    "img-to-url": "^1.7.0",
+    "libsignal-node": "^2.0.1",
+    "link-preview-js": "^3.0.5",
+    "moment": "^2.29.4",
     "ms": "^2.1.3",
+    "node-fetch": "^3.3.2",
     "qrcode": "^1.5.3",
+    "request": "^2.88.2",
     "spinnies": "^0.5.1"
   }
 }

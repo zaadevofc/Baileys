@@ -5,6 +5,7 @@ export const MESSAGE_TYPE = {
     'CALL_MISSED_VOICE': 'voiceCall',
     'CALL_MISSED_VIDEO': 'videoCall',
     'editedMessage': 'text',
+    'listMessage': 'list',
     'templateMessage': 'button',
     'buttonsMessage': 'button',
     'templateButtonReplyMessage': 'replyButton',
